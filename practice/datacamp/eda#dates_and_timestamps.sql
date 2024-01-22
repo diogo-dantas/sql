@@ -43,6 +43,59 @@ SELECT category, AVG(date_completed - date_created) AS completion_time
 -- Order the results
  ORDER BY completion_time DESC;
 
+-- Date parts
 
+-- Extract the month from date_created and count requests
+SELECT date_part('month',date_created) AS month, 
+       count(*)
+  FROM evanston311
+ -- Limit the date range
+ WHERE date_created >= '2016-01-01'
+   AND date_created < '2018-01-01'
+ -- Group by what to get monthly counts?
+ GROUP BY month;
+
+ -- Get the hour and count requests
+SELECT date_part('hour',date_created) AS hour,
+       count(*)
+  FROM evanston311
+ GROUP BY hour
+ -- Order results to select most common
+ ORDER BY count DESC
+ LIMIT 1;
+
+-- Count requests completed by hour
+SELECT date_part('hour',date_completed) AS hour,
+       count(*)
+  FROM evanston311
+ GROUP BY hour
+ ORDER BY count DESC;
+
+ -- Variation by day of week
+
+ -- Select name of the day of the week the request was created 
+SELECT to_char(date_created,'day') AS day, 
+       -- Select avg time between request creation and completion
+       AVG(date_completed - date_created) AS duration
+  FROM evanston311 
+ -- Group by the name of the day of the week and 
+ -- integer value of day of week the request was created
+ GROUP BY day, EXTRACT(DOW FROM date_created)
+ -- Order by integer value of the day of the week 
+ -- the request was created
+ ORDER BY EXTRACT(DOW FROM date_created);
+
+ -- Date truncation
+
+ -- Aggregate daily counts by month
+SELECT date_trunc('month',day) AS month,
+       AVG(count)
+  -- Subquery to compute daily counts
+  FROM (SELECT date_trunc('day', date_created) AS day,
+               COUNT(*) AS count
+          FROM evanston311
+         GROUP BY day) AS daily_count
+ GROUP BY month
+ ORDER BY month;
 
  
