@@ -13,5 +13,6 @@ Repository intended for practice and projects using SQL.
 -  Investigate semi-joins and anti-joins;
 -  Create nested queries;
 -  Use of CASE statements, subqueries, window functions, correlated queries and common table expressions;
+-  How to clean data stored in a PostgreSQL database (transform and construct pivot tables);
 -  Present data cleanly using tools like rounding and aliasing.
 
